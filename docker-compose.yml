@@ -33,4 +33,52 @@ services:
       - /run/media/sebas/Passport/media/movies:/movies
     restart: unless-stopped
 
-  
+  radarr:
+    image: lscr.io/linuxserver/radarr:arm64v8-latest
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Lima
+    volumes:
+      - /run/media/sebas/Passport/config-docker/radarr:/config
+      - /run/media/sebas/Passport/movies:/movies
+      - /run/media/sebas/Passport/series:/series
+      - /run/media/sebas/Passport/downloads:/downloads
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+
+  transmission:
+    image: lscr.io/linuxserver/transmission:arm64v8-latest
+    container_name: transmission
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Lima
+      - USER=sebasvr
+      - PASS=${WEBPASSWORD}
+    volumes:
+      - /run/media/sebas/Passport/config-docker/transmission:/config
+      - /run/media/sebas/Passport/downloads:/downloads
+      - /run/media/sebas/Passport/torrents:/watch
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    restart: unless-stopped
+
+#   duckdns:
+#     image: lscr.io/linuxserver/duckdns
+#     container_name: duckdns
+#     environment:
+#       - PUID=1000 #optional
+#       - PGID=1000 #optional
+#       - TZ=America/Lima
+#       - SUBDOMAINS=#{DUCKDOMAIN}
+#       - TOKEN=${DUCKTOKEN}
+#       - LOG_FILE=false #optional
+#     volumes:
+#       - ./duckdns-config:/config #optional
+#     restart: unless-stopped
+
