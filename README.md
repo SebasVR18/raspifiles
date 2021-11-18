@@ -7,6 +7,7 @@ Archivos para mi Raspberry Pi 4
 - docker.io
 - docker-compose
 
-.env para:
+### .env
+WEBPASSWORD=...
 - docker-essential/docker-compose.yml
 - docker-downloads/docker-compose.yml
