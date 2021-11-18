@@ -1,0 +1,67 @@
+version: "3"
+
+services:
+  radarr:
+    image: lscr.io/linuxserver/radarr:arm64v8-latest
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Lima
+    volumes:
+      - /run/media/sebas/Passport/config-docker/radarr:/config
+      - /run/media/sebas/Passport/media/movies:/movies
+      - /run/media/sebas/Passport/downloads:/downloads
+    ports:
+      - 7878:7878
+    # restart: unless-stopped
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Lima
+    volumes:
+      - /run/media/sebas/Passport/config-docker/sonarr:/config
+      - /run/media/sebas/Passport/media/series:/tv #optional
+      - /run/media/sebas/Passport/downloads:/downloads #optional
+    ports:
+      - 8989:8989
+    # restart: unless-stopped
+
+  jackett:
+    image: lscr.io/linuxserver/jackett
+    container_name: jackett
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Lima
+      - AUTO_UPDATE=true #optional
+    volumes:
+      - /run/media/sebas/Passport/config-docker/jackett:/config
+      - /run/media/sebas/Passport/downloads:/downloads
+    ports:
+      - 9117:9117
+    # restart: unless-stopped
+
+  transmission:
+    image: lscr.io/linuxserver/transmission:arm64v8-latest
+    container_name: transmission
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Lima
+      - USER=sebasvr
+      - PASS=${WEBPASSWORD}
+    volumes:
+      - /run/media/sebas/Passport/config-docker/transmission:/config
+      - /run/media/sebas/Passport/downloads:/downloads
+      - /run/media/sebas/Passport/torrents:/watch
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    # restart: unless-stopped
+

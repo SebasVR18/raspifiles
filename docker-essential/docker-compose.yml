@@ -1,0 +1,48 @@
+version: "3"
+
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "67:67/udp"
+      - "80:80/tcp"
+    environment:
+      TZ: 'America/Lima'
+      WEBPASSWORD: ${WEBPASSWORD}
+    volumes:
+      - '/run/media/sebas/Passport/config-docker/pihole/etc-pihole/:/etc/pihole/'
+      - '/run/media/sebas/Passport/config-docker/pihole/etc-dnsmasq.d/:/etc/dnsmasq.d/'
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
+
+  samba:
+    container_name: samba
+    image: dperson/samba:aarch64
+    ports:
+      - "139:139"
+      - "445:445"
+    environment:
+      TZ: 'America/Lima'
+    volumes:
+      - '/run/media/sebas/Passport:/mount/Passport'
+    command: ['-u', 'sebas;${WEBPASSWORD}', '-s', 'users;/srv;no;no;no;sebas', '-s', 'Passport;/mount/Passport;yes;no;no;sebas;sebas']
+
+  plex:
+    image: ghcr.io/linuxserver/plex:arm64v8-latest
+    container_name: plex
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - VERSION=docker
+    volumes:
+      - /run/media/sebas/Passport/config-docker/plex:/config
+      - /run/media/sebas/Passport/media/series:/tv
+      - /run/media/sebas/Passport/media/movies:/movies
+      - /run/media/sebas/Passport/media/music:/music
+    # restart: unless-stopped
+
