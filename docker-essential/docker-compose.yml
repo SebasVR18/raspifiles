@@ -13,8 +13,8 @@ services:
       TZ: 'America/Lima'
       WEBPASSWORD: ${WEBPASSWORD}
     volumes:
-      - '/run/media/sebas/Passport/config-docker/pihole/etc-pihole/:/etc/pihole/'
-      - '/run/media/sebas/Passport/config-docker/pihole/etc-dnsmasq.d/:/etc/dnsmasq.d/'
+      - '/media/pi/Passport/config-docker/pihole/etc-pihole/:/etc/pihole/'
+      - '/media/pi/Passport/config-docker/pihole/etc-dnsmasq.d/:/etc/dnsmasq.d/'
     cap_add:
       - NET_ADMIN
     restart: unless-stopped
@@ -28,7 +28,7 @@ services:
     environment:
       TZ: 'America/Lima'
     volumes:
-      - '/run/media/sebas/Passport:/mount/Passport'
+      - '/media/pi/Passport:/mount/Passport'
     command: ['-u', 'sebas;${WEBPASSWORD}', '-s', 'users;/srv;no;no;no;sebas', '-s', 'Passport;/mount/Passport;yes;no;no;sebas;sebas']
 
   plex:
@@ -40,9 +40,9 @@ services:
       - PGID=1000
       - VERSION=docker
     volumes:
-      - /run/media/sebas/Passport/config-docker/plex:/config
-      - /run/media/sebas/Passport/media/series:/tv
-      - /run/media/sebas/Passport/media/movies:/movies
-      - /run/media/sebas/Passport/media/music:/music
+      - /media/pi/Passport/config-docker/plex:/config
+      - /media/pi/Passport/media/series:/tv
+      - /media/pi/Passport/media/movies:/movies
+      - /media/pi/Passport/media/music:/music
     # restart: unless-stopped
 
