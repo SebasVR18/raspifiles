@@ -28,8 +28,10 @@ services:
     environment:
       TZ: 'America/Lima'
     volumes:
-      - '/media/pi/Passport:/mount/Passport'
-    command: ['-u', 'sebas;${WEBPASSWORD}', '-s', 'users;/srv;no;no;no;sebas', '-s', 'Passport;/mount/Passport;yes;no;no;sebas;sebas']
+      - '/media/pi/Passport/media:/mount/Passport/media'
+      - '/media/pi/Passport/Universal:/mount/Passport/Universal'
+    command: ['-u', 'sebas;${WEBPASSWORD}', '-s', 'users;/srv;no;no;no;sebas', '-s', 'Media;/mount/Passport/media;yes;no;no;sebas;sebas', '-s', 'Universal;/mount/Passport/Universal;yes;no;no;sebas;sebas']
+    restart: unless-stopped
 
   plex:
     image: ghcr.io/linuxserver/plex:arm64v8-latest
@@ -44,5 +46,21 @@ services:
       - /media/pi/Passport/media/series:/tv
       - /media/pi/Passport/media/movies:/movies
       - /media/pi/Passport/media/music:/music
-    # restart: unless-stopped
+    restart: unless-stopped
+
+  duplicati:
+    image: lscr.io/linuxserver/duplicati:arm64v8-latest
+    container_name: duplicati
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Lima
+      # - CLI_ARGS= #optional
+    volumes:
+      - /media/pi/Passport/config-docker/duplicati:/config
+      - /media/pi/Passport/Backups:/backups
+      - /media/pi/Passport/Universal:/source
+    ports:
+      - 8200:8200
+    restart: unless-stopped
 
