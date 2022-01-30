@@ -2,10 +2,11 @@
 
 force_turbo=1
 over_voltage=8
-arm_freq=2150
+arm_freq=2100
 gpu_freq=800
 
-gpu_mem=512
+gpu_mem=256
+
 initramfs initramfs-linux.img followkernel
 kernel=kernel8.img
 arm_64bit=1
